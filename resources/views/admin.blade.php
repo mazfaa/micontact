@@ -6,9 +6,9 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-    @elseif (session('destroy'))
+    @elseif (session('failed'))
       <div class="alert alert-success alert-dismissible fade show" role="alert">
-        {{ session('destroy') }}
+        {{ session('failed') }}
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>

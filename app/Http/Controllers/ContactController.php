@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Contact;
 use App\Http\Requests\StoreContactRequest;
 use App\Http\Requests\UpdateContactRequest;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class ContactController extends Controller
 {
@@ -14,7 +16,6 @@ class ContactController extends Controller
      */
     public function index()
     {
-        // dd(Contact::whereUserId(Auth::id()));
         return view('admin', ['contacts' => Contact::whereUserId(Auth::id())->get()]);
     }
 
@@ -31,6 +32,19 @@ class ContactController extends Controller
      */
     public function store(StoreContactRequest $request)
     {
+        $loggedInUserContacts = Contact::whereUserId(Auth::id())->get();
+        foreach ($loggedInUserContacts as $loggedInUserContact) {
+            $isTaken = 
+                Contact::whereEmail($loggedInUserContact->email) ==
+                Contact::whereEmail($request->email) || 
+                Contact::whereEmail($loggedInUserContact->phone) ==
+                Contact::whereEmail($request->phone); 
+
+            if ($isTaken) {
+                return back()->with('failed', 'Email or Phone has already been taken.');
+            }
+        }
+        
         $contact = new Contact;
         $contact->user_id = Auth::id();
         $contact->fill($request->all());
@@ -61,6 +75,6 @@ class ContactController extends Controller
     public function destroy(Contact $contact)
     {
         $contact->delete();
-        return back()->with('destroy', 'Record Deleted Successfully!');
+        return back()->with('failed', 'Record Deleted Successfully!');
     }
 }

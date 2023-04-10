@@ -90,12 +90,10 @@
                     <img src="/assets/images/user.jpg" alt="">{{ Auth::user()->name }}
                   </a>
                   <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item"  href="login.html">
                       <form action="{{ route('logout') }}" method="post">
                         @csrf
                         <button type="submit" class="dropdown-item">Log Out <i class="bi bi-box-arrow-in-right"></i></button>
                       </form>
-                    </a>
                   </div>
                 </li>
 
