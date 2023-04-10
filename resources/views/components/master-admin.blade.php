@@ -52,13 +52,7 @@
               </div>
               <div class="profile_info">
                 <span>Welcome,</span>
-                <h2>
-                    @auth 
-                        {{ Auth::user()->name }} 
-                    @else
-                        Admin
-                    @endauth
-                </h2>
+                <h2>{{ Auth::user()->name }}</h2>
               </div>
             </div>
             <!-- /menu profile quick info -->
