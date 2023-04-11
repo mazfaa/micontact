@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Contact;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreContactRequest;
 use App\Http\Requests\UpdateContactRequest;
-use Illuminate\Support\Facades\Auth;
 
 class ContactController extends Controller
 {
