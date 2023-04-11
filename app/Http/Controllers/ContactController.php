@@ -37,7 +37,6 @@ class ContactController extends Controller
     {
         /*
         * Check whether the email or phone has already been taken
-        * called from contact.php model file
         */ 
         $isTaken = Contact::whereUserId(Auth::id())
                     ->emailOrPhoneTaken($request->email, $request->phone)

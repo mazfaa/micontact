@@ -1,12 +1,11 @@
 <?php
 
-use App\Http\Controllers\ContactController;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\RegistrationController;
-use App\Providers\RouteServiceProvider;
-use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function() {
     Route::get('/', [HomeController::class, 'index'])->name('home');

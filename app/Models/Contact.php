@@ -22,7 +22,6 @@ class Contact extends Model
     * Check whether the email or phone has already been taken
     * and later this function will be called on the controller
     */ 
-
     public function scopeEmailOrPhoneTaken($query, $email, $phone)
     {
         return $query->where('email', $email)
