@@ -5,9 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Contact;
 use App\Http\Requests\StoreContactRequest;
 use App\Http\Requests\UpdateContactRequest;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 
 class ContactController extends Controller
 {
@@ -16,7 +14,12 @@ class ContactController extends Controller
      */
     public function index()
     {
-        return view('admin', ['contacts' => Contact::whereUserId(Auth::id())->get()]);
+        if (!auth()->user()) {
+            return redirect()->route('/login');
+        }
+        return response()
+            ->view('admin', ['contacts' => Contact::whereUserId(Auth::id())->get()])
+            ->header('Cache-Control', 'no-cache, no-store, must-revalidate');
     }
 
     /**
@@ -32,17 +35,16 @@ class ContactController extends Controller
      */
     public function store(StoreContactRequest $request)
     {
-        $loggedInUserContacts = Contact::whereUserId(Auth::id())->get();
-        foreach ($loggedInUserContacts as $loggedInUserContact) {
-            $isTaken = 
-                Contact::whereEmail($loggedInUserContact->email) ==
-                Contact::whereEmail($request->email) || 
-                Contact::whereEmail($loggedInUserContact->phone) ==
-                Contact::whereEmail($request->phone); 
+        /*
+        * Check whether the email or phone has already been taken
+        * called from contact.php model file
+        */ 
+        $isTaken = Contact::whereUserId(Auth::id())
+                    ->emailOrPhoneTaken($request->email, $request->phone)
+                    ->exists();
 
-            if ($isTaken) {
-                return back()->with('failed', 'Email or Phone has already been taken.');
-            }
+        if ($isTaken) {
+            return back()->with('failed', 'Email or Phone has already been taken.');
         }
         
         $contact = new Contact;

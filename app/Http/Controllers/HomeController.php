@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 class HomeController extends Controller
 {
     public function index() {
-        return view('index');
+        return response()
+        ->view('index')
+        ->header('Cache-control', 'no-cache, no-store, must-revalidate');
     }
 }
